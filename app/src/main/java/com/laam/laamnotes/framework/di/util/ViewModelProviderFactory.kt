@@ -1,4 +1,4 @@
-package com.laam.laamnotes.util.viewmodel
+package com.laam.laamnotes.framework.di.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

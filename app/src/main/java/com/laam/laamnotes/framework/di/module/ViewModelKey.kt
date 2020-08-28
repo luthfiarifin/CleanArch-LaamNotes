@@ -1,4 +1,4 @@
-package com.laam.laamnotes.framework.di.viewmodel
+package com.laam.laamnotes.framework.di.module
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
