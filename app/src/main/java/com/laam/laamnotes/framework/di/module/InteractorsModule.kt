@@ -5,7 +5,7 @@ import com.laam.core.usecase.AddNote
 import com.laam.core.usecase.GetAllNotes
 import com.laam.core.usecase.GetNote
 import com.laam.core.usecase.RemoveNote
-import com.laam.laamnotes.framework.interactors.NoteInteractors
+import com.laam.laamnotes.framework.interactors.NoteDetailInteractors
 import dagger.Module
 import dagger.Provides
 
@@ -14,10 +14,9 @@ object InteractorsModule {
 
     @Provides
     @JvmStatic
-    fun provideNoteInteractors(repository: NoteRepository) =
-        NoteInteractors(
+    fun provideNoteDetailInteractors(repository: NoteRepository) =
+        NoteDetailInteractors(
             AddNote(repository),
-            GetAllNotes(repository),
             GetNote(repository),
             RemoveNote(repository)
         )
