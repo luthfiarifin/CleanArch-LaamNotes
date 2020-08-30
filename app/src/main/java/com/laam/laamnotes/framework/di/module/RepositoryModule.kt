@@ -1,7 +1,7 @@
 package com.laam.laamnotes.framework.di.module
 
 import com.laam.core.repository.NoteRepository
-import com.laam.laamnotes.framework.RoomNoteDataSource
+import com.laam.laamnotes.framework.datasource.NoteDataSource
 import dagger.Module
 import dagger.Provides
 
@@ -10,6 +10,6 @@ object RepositoryModule {
 
     @Provides
     @JvmStatic
-    fun provideNoteRepository(dataSource: RoomNoteDataSource) =
+    fun provideNoteRepository(dataSource: NoteDataSource) =
         NoteRepository(dataSource)
 }

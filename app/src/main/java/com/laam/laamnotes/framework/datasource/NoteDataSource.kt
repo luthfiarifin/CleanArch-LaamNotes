@@ -1,4 +1,4 @@
-package com.laam.laamnotes.framework
+package com.laam.laamnotes.framework.datasource
 
 import com.laam.core.data.Note
 import com.laam.core.repository.NoteDataSource
@@ -6,7 +6,8 @@ import com.laam.laamnotes.framework.db.NoteDao
 import com.laam.laamnotes.framework.db.NoteEntity
 import javax.inject.Inject
 
-class RoomNoteDataSource @Inject constructor(private val noteDao: NoteDao) : NoteDataSource {
+class NoteDataSource @Inject constructor(private val noteDao: NoteDao) :
+    NoteDataSource {
 
     override suspend fun add(note: Note) = noteDao.addNoteEntity(NoteEntity.mapFromNote(note))
 
