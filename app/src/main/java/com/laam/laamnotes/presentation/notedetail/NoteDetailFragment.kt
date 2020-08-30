@@ -7,11 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
-import com.laam.laamnotes.databinding.FragmentNoteListBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
 
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
-    NoteDetailNavigator {
+    NoteDetailContract.View {
 
     override fun getViewModel(): Class<NoteDetailViewModel> = NoteDetailViewModel::class.java
 
