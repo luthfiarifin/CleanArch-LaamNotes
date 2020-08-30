@@ -2,6 +2,7 @@ package com.laam.laamnotes.framework.di.component
 
 import android.app.Application
 import com.laam.laamnotes.framework.di.builder.ActivityBuilder
+import com.laam.laamnotes.framework.di.module.DatabaseModule
 import com.laam.laamnotes.framework.di.module.ViewModelFactoryModule
 import com.laam.laamnotes.framework.di.module.ViewModelModule
 import com.laam.laamnotes.presentation.NotesApplication
@@ -17,7 +18,8 @@ import javax.inject.Singleton
         AndroidInjectionModule::class,
         ActivityBuilder::class,
         ViewModelFactoryModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent : AndroidInjector<NotesApplication> {
