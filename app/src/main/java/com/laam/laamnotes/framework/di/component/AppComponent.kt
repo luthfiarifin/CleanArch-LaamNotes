@@ -19,7 +19,7 @@ import javax.inject.Singleton
         ViewModelModule::class,
         DatabaseModule::class,
         RepositoryModule::class,
-        UseCaseModule::class
+        InteractorsModule::class
     ]
 )
 interface AppComponent : AndroidInjector<NotesApplication> {
