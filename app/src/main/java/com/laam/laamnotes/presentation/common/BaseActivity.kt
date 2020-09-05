@@ -1,7 +1,6 @@
 package com.laam.laamnotes.presentation.common
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
@@ -24,8 +23,8 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : ViewModel> : DaggerAppCom
     val viewModel
         get() = mViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
         mViewModel = ViewModelProvider(this, factory)[getViewModel()]

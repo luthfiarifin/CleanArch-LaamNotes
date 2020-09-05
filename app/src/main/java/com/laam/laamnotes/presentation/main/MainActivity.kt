@@ -1,7 +1,6 @@
 package com.laam.laamnotes.presentation.main
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.ActivityMainBinding
 import com.laam.laamnotes.presentation.common.BaseActivity
@@ -11,8 +10,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), MainNav
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         viewModel.setNavigator(this)
     }
