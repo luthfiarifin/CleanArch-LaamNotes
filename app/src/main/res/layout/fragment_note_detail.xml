@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.laam.laamnotes.presentation.notedetail.NoteDetailViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,6 +23,7 @@
             android:inputType="text"
             android:paddingStart="@dimen/normal_margin"
             android:paddingEnd="@dimen/normal_margin"
+            android:text="@={viewModel.noteTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,6 +39,7 @@
             android:inputType="text"
             android:paddingStart="@dimen/normal_margin"
             android:paddingEnd="@dimen/normal_margin"
+            android:text="@={viewModel.noteContent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

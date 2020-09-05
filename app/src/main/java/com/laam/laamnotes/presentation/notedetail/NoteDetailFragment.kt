@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
@@ -19,6 +21,9 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+
+        viewBinding.viewModel = viewModel
+        viewModel.setNavigator(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -29,10 +34,18 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.item_save -> {
+                viewModel.saveNote()
                 true
             }
             else ->
                 return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onSaveNoteSucceed() {
+        view?.let {
+            Snackbar.make(it, "Done!", Snackbar.LENGTH_SHORT).show()
+            Navigation.findNavController(it).popBackStack()
         }
     }
 }
