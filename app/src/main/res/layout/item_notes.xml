@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="data"
+            type="com.laam.core.data.Note" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/noteLayout"
         android:layout_width="match_parent"
@@ -20,29 +27,41 @@
             <TextView
                 android:id="@+id/title"
                 style="@style/Title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:text="@{data.title}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/lorem" />
 
             <TextView
                 android:id="@+id/content"
                 style="@style/Text"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/standard_margin"
+                android:ellipsize="end"
+                android:maxLines="10"
+                android:text="@{data.content}"
+                app:layout_constraintEnd_toEndOf="@+id/title"
+                app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:text="@string/lorem_ipsum" />
 
             <TextView
                 android:id="@+id/date"
                 style="@style/Detail"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/normal_margin"
+                app:formatAddAttributeDate="@{`Last updated: `}"
+                app:formatNormalDate="@{data.updateTime}"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/content"
+                app:layout_constraintStart_toStartOf="@+id/content"
                 app:layout_constraintTop_toBottomOf="@+id/content"
                 tools:text="Last updated" />
         </androidx.constraintlayout.widget.ConstraintLayout>

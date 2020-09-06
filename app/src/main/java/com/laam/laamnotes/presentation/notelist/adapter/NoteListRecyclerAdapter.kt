@@ -12,10 +12,11 @@ import com.laam.laamnotes.databinding.ItemNotesBinding
 
 class NoteListRecyclerAdapter :
     ListAdapter<Note, NoteListRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): NoteListRecyclerAdapter.ViewHolder {
+    ): ViewHolder {
         return ViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -26,10 +27,16 @@ class NoteListRecyclerAdapter :
         )
     }
 
-    override fun onBindViewHolder(holder: NoteListRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(binding: ItemNotesBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(private val binding: ItemNotesBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(data: Note) {
+            binding.data = data
+        }
+    }
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {

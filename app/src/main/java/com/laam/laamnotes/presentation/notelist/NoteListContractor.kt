@@ -4,6 +4,7 @@ interface NoteListContractor {
 
     interface ViewModel {
         fun onAddNote(view: android.view.View)
+        fun getAllNotes()
     }
 
     interface View {
