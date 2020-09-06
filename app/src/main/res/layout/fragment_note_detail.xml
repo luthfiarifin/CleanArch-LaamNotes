@@ -36,7 +36,7 @@
             android:layout_height="0dp"
             android:gravity="top|start"
             android:hint="@string/content"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:paddingStart="@dimen/normal_margin"
             android:paddingEnd="@dimen/normal_margin"
             android:text="@={viewModel.noteContent}"
