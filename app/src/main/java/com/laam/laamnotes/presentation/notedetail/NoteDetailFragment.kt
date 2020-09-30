@@ -24,6 +24,16 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
 
         viewBinding.viewModel = viewModel
         viewModel.setNavigator(this)
+
+        arguments?.let { setUpVariable(it) }
+    }
+
+    private fun setUpVariable(it: Bundle) {
+        viewModel.noteId.set(NoteDetailFragmentArgs.fromBundle(it).noteId)
+
+        if (viewModel.noteId.get() != 0L) {
+            viewModel.getCurrentNote()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

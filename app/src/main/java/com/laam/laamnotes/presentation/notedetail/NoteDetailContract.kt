@@ -4,6 +4,7 @@ interface NoteDetailContract {
 
     interface ViewModel {
         fun saveNote()
+        fun getCurrentNote()
     }
 
     interface View {
