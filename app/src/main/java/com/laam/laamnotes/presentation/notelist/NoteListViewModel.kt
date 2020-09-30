@@ -1,6 +1,5 @@
 package com.laam.laamnotes.presentation.notelist
 
-import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
