@@ -17,6 +17,7 @@ class NoteDetailViewModel @Inject constructor(
     val noteContent = ObservableField<String>()
 
     private val noteCreationTime = ObservableLong(0)
+    private val noteUpdateTime = ObservableLong(0)
 
     override fun saveNote() {
         if (noteTitle.get().isNullOrEmpty() || noteContent.get().isNullOrEmpty()) {
@@ -44,7 +45,23 @@ class NoteDetailViewModel @Inject constructor(
                 noteTitle.set(currentNote.title)
                 noteContent.set(currentNote.content)
                 noteCreationTime.set(currentNote.creationTime)
+                noteUpdateTime.set(currentNote.updateTime)
             }
+        }
+    }
+
+    override fun deleteNote() {
+        coroutineScopeIO.launch {
+            val note = Note(
+                noteTitle.get().toString(),
+                noteContent.get().toString(),
+                noteCreationTime.get(),
+                noteUpdateTime.get(),
+                noteId.get()
+            )
+
+            interactors.removeNote(note)
+            navigator?.onSaveNoteSucceed()
         }
     }
 

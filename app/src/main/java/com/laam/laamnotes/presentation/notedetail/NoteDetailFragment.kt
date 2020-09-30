@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
@@ -41,14 +42,40 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+
+        if (viewModel.noteId.get() == 0L) {
+            menu.findItem(R.id.item_delete).isVisible = false
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.item_save -> {
                 viewModel.saveNote()
                 true
             }
+            R.id.item_delete -> {
+                deleteNote()
+                true
+            }
             else ->
                 return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun deleteNote() {
+        activity?.let {
+            AlertDialog.Builder(it)
+                .setTitle("Delete note")
+                .setMessage("Are you sure want delete this note?")
+                .setPositiveButton("Yes") { _, _ ->
+                    viewModel.deleteNote()
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .create()
+                .show()
         }
     }
 
