@@ -26,8 +26,8 @@ class NoteListViewModel @Inject constructor(
 
     val noteLoading = ObservableBoolean(true)
 
-    override fun onAddNote(view: View) {
-        navigator?.onAddNoteClickListener(view)
+    override fun onAddNote() {
+        navigator?.onAddNoteClickListener()
     }
 
     override fun getAllNotes() {

@@ -10,9 +10,9 @@ import com.laam.laamnotes.presentation.common.BaseFragment
 import com.laam.laamnotes.presentation.notelist.adapter.NoteListRecyclerAdapter
 
 class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel>(),
-    NoteListContractor.View {
+    NoteListContractor.View, NoteListRecyclerAdapter.Listener {
 
-    private val rvAdapter = NoteListRecyclerAdapter()
+    private val rvAdapter = NoteListRecyclerAdapter(this)
 
     override fun getViewModel(): Class<NoteListViewModel> = NoteListViewModel::class.java
 
@@ -38,8 +38,16 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel
         })
     }
 
-    override fun onAddNoteClickListener(view: View) {
-        val action = NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment()
-        Navigation.findNavController(view).navigate(action)
+    override fun onAddNoteClickListener() {
+        goToNoteDetails()
+    }
+
+    override fun onClickListener(id: Long) {
+        goToNoteDetails(id)
+    }
+
+    private fun goToNoteDetails(id: Long = 0L) {
+        val action = NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment(id)
+        view?.let { Navigation.findNavController(it).navigate(action) }
     }
 }

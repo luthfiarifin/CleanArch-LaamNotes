@@ -10,7 +10,7 @@ import com.laam.core.data.Note
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.ItemNotesBinding
 
-class NoteListRecyclerAdapter :
+class NoteListRecyclerAdapter(val listener: Listener) :
     ListAdapter<Note, NoteListRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(
@@ -31,11 +31,17 @@ class NoteListRecyclerAdapter :
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: ItemNotesBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemNotesBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: Note) {
             binding.data = data
+
+            binding.noteLayout.setOnClickListener { listener.onClickListener(data.id) }
         }
+    }
+
+    interface Listener {
+        fun onClickListener(id: Long)
     }
 
     companion object {
