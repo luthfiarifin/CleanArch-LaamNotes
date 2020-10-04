@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
+import com.laam.laamnotes.presentation.notelist.NoteListFragment
+import com.laam.laamnotes.presentation.util.fragment.NavigationUtil.setNavigationResult
 
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
     NoteDetailContract.View {
@@ -81,6 +83,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
 
     override fun onSaveNoteSucceed() {
         view?.let {
+            setNavigationResult(true, NoteListFragment.KEY_RELOAD_DATA)
             Snackbar.make(it, "Done!", Snackbar.LENGTH_SHORT).show()
             Navigation.findNavController(it).popBackStack()
         }

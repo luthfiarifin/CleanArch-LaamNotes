@@ -8,6 +8,7 @@ import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteListBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
 import com.laam.laamnotes.presentation.notelist.adapter.NoteListRecyclerAdapter
+import com.laam.laamnotes.presentation.util.fragment.NavigationUtil.getNavigationResult
 
 class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel>(),
     NoteListContractor.View, NoteListRecyclerAdapter.Listener {
@@ -26,6 +27,13 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel
 
         initUi()
         observeNotes()
+        observeNavigationResult()
+    }
+
+    private fun observeNavigationResult() {
+        getNavigationResult<Boolean>(KEY_RELOAD_DATA)?.observe(viewLifecycleOwner, Observer {
+            if (it) viewModel.getAllNotes()
+        })
     }
 
     private fun initUi() {
@@ -49,5 +57,9 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel
     private fun goToNoteDetails(id: Long = 0L) {
         val action = NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment(id)
         view?.let { Navigation.findNavController(it).navigate(action) }
+    }
+
+    companion object {
+        const val KEY_RELOAD_DATA = "reload_note_list_data"
     }
 }

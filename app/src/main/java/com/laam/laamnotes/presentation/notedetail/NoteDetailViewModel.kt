@@ -33,10 +33,8 @@ class NoteDetailViewModel @Inject constructor(
             noteId.get()
         )
 
-        coroutineScopeIO.launch {
-            interactors.addNote(note)
-            navigator?.onSaveNoteSucceed()
-        }
+        coroutineScopeIO.launch { interactors.addNote(note) }
+        navigator?.onSaveNoteSucceed()
     }
 
     override fun getCurrentNote() {
@@ -51,18 +49,16 @@ class NoteDetailViewModel @Inject constructor(
     }
 
     override fun deleteNote() {
-        coroutineScopeIO.launch {
-            val note = Note(
-                noteTitle.get().toString(),
-                noteContent.get().toString(),
-                noteCreationTime.get(),
-                noteUpdateTime.get(),
-                noteId.get()
-            )
+        val note = Note(
+            noteTitle.get().toString(),
+            noteContent.get().toString(),
+            noteCreationTime.get(),
+            noteUpdateTime.get(),
+            noteId.get()
+        )
 
-            interactors.removeNote(note)
-            navigator?.onSaveNoteSucceed()
-        }
+        coroutineScopeIO.launch { interactors.removeNote(note) }
+        navigator?.onSaveNoteSucceed()
     }
 
 }
