@@ -1,4 +1,4 @@
-package com.laam.laamnotes.presentation.util.fragment
+package com.laam.laamnotes.presentation.util.view
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController

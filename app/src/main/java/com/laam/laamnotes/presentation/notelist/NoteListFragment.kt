@@ -8,7 +8,7 @@ import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteListBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
 import com.laam.laamnotes.presentation.notelist.adapter.NoteListRecyclerAdapter
-import com.laam.laamnotes.presentation.util.fragment.NavigationUtil.getNavigationResult
+import com.laam.laamnotes.presentation.util.view.NavigationUtil.getNavigationResult
 
 class NoteListFragment : BaseFragment<FragmentNoteListBinding, NoteListViewModel>(),
     NoteListContractor.View, NoteListRecyclerAdapter.Listener {

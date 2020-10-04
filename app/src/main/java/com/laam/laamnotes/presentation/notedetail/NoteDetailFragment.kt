@@ -12,7 +12,8 @@ import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
 import com.laam.laamnotes.presentation.notelist.NoteListFragment
-import com.laam.laamnotes.presentation.util.fragment.NavigationUtil.setNavigationResult
+import com.laam.laamnotes.presentation.util.view.NavigationUtil.setNavigationResult
+import com.laam.laamnotes.presentation.util.view.ViewUtil.hideKeyboard
 
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
     NoteDetailContract.View {
@@ -85,6 +86,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         view?.let {
             setNavigationResult(true, NoteListFragment.KEY_RELOAD_DATA)
             Snackbar.make(it, "Done!", Snackbar.LENGTH_SHORT).show()
+            it.hideKeyboard(activity)
             Navigation.findNavController(it).popBackStack()
         }
     }
