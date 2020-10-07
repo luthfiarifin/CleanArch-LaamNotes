@@ -1,6 +1,6 @@
 package com.laam.laamnotes.framework.di.module
 
-import com.laam.core.repository.NoteRepository
+import com.laam.core.repository.note.NoteRepository
 import com.laam.laamnotes.framework.datasource.NoteDataSource
 import dagger.Module
 import dagger.Provides

@@ -1,4 +1,4 @@
-package com.laam.core.repository
+package com.laam.core.repository.note
 
 import com.laam.core.data.Note
 

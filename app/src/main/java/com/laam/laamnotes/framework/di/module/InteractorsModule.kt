@@ -1,10 +1,10 @@
 package com.laam.laamnotes.framework.di.module
 
-import com.laam.core.repository.NoteRepository
-import com.laam.core.usecase.AddNote
-import com.laam.core.usecase.GetAllNotes
-import com.laam.core.usecase.GetNote
-import com.laam.core.usecase.RemoveNote
+import com.laam.core.repository.note.NoteRepository
+import com.laam.core.usecase.note.AddNote
+import com.laam.core.usecase.note.GetAllNotes
+import com.laam.core.usecase.note.GetNote
+import com.laam.core.usecase.note.RemoveNote
 import com.laam.laamnotes.framework.interactors.NoteDetailInteractors
 import com.laam.laamnotes.framework.interactors.NoteListInteractors
 import dagger.Module

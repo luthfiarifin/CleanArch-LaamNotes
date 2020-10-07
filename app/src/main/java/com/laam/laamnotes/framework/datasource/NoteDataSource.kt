@@ -1,7 +1,7 @@
 package com.laam.laamnotes.framework.datasource
 
 import com.laam.core.data.Note
-import com.laam.core.repository.NoteDataSource
+import com.laam.core.repository.note.NoteDataSource
 import com.laam.laamnotes.framework.db.dao.NoteDao
 import com.laam.laamnotes.framework.db.entity.NoteEntity
 import javax.inject.Inject
