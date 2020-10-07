@@ -1,6 +1,7 @@
-package com.laam.laamnotes.framework.db
+package com.laam.laamnotes.framework.db.dao
 
 import androidx.room.*
+import com.laam.laamnotes.framework.db.entity.NoteEntity
 
 @Dao
 interface NoteDao {
