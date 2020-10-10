@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
+import com.laam.laamnotes.presentation.notedetail.adapter.NoteDetailImageAdapter
 import com.laam.laamnotes.presentation.notelist.NoteListFragment
 import com.laam.laamnotes.presentation.util.constant.PermissionConstant
 import com.laam.laamnotes.presentation.util.constant.RequestConstant
@@ -25,11 +26,13 @@ import com.laam.laamnotes.presentation.util.view.NavigationUtil.setNavigationRes
 import com.laam.laamnotes.presentation.util.view.ViewUtil.hideKeyboard
 
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
-    NoteDetailContract.View {
+    NoteDetailContract.View, NoteDetailImageAdapter.Listener {
 
     override fun getViewModel(): Class<NoteDetailViewModel> = NoteDetailViewModel::class.java
 
     override fun getLayoutId(): Int = R.layout.fragment_note_detail
+
+    private val rvImageAdapter = NoteDetailImageAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,6 +42,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         viewModel.setNavigator(this)
 
         arguments?.let { setUpVariable(it) }
+        initUi()
     }
 
     override fun setUpVariable(it: Bundle) {
@@ -47,6 +51,10 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         if (viewModel.noteId.get() != 0L) {
             viewModel.getCurrentNote()
         }
+    }
+
+    override fun initUi() {
+        viewBinding.recyclerViewImage.adapter = rvImageAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -128,6 +136,32 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return
+        }
+
+        when (requestCode) {
+            RequestConstant.IMAGE_PICKER_REQUEST_CODE -> {
+                if (data?.data != null) {
+                    data.data?.let { viewModel.addImage(it.toString()) }
+                } else {
+                    data?.clipData?.let { clipData ->
+                        val pathList = arrayListOf<String>()
+
+                        for (i in 0 until clipData.itemCount) {
+                            clipData.getItemAt(i).uri?.let { pathList.add(it.toString()) }
+                        }
+
+                        viewModel.addImage(pathList)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onSaveNoteSucceed() {
         view?.let {
             setNavigationResult(true, NoteListFragment.KEY_RELOAD_DATA)
@@ -135,5 +169,17 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
             it.hideKeyboard(activity)
             Navigation.findNavController(it).popBackStack()
         }
+    }
+
+    override fun onAddImageSucceed(paths: ArrayList<String>) {
+        rvImageAdapter.submitList(paths)
+    }
+
+    override fun onClick(index: Int) {
+        //TODO("onClick")
+    }
+
+    override fun onDeleteClick(index: Int) {
+        rvImageAdapter.deleteList(viewModel.removeImage(index))
     }
 }

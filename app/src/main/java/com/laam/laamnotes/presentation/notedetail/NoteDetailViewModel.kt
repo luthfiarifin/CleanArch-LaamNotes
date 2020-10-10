@@ -1,5 +1,6 @@
 package com.laam.laamnotes.presentation.notedetail
 
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableLong
 import com.laam.core.data.Note
@@ -18,6 +19,8 @@ class NoteDetailViewModel @Inject constructor(
 
     private val noteCreationTime = ObservableLong(0)
     private val noteUpdateTime = ObservableLong(0)
+
+    val imagePathList = ObservableArrayList<String>()
 
     override fun saveNote() {
         if (noteTitle.get().isNullOrEmpty() || noteContent.get().isNullOrEmpty()) {
@@ -61,4 +64,18 @@ class NoteDetailViewModel @Inject constructor(
         navigator?.onSaveNoteSucceed()
     }
 
+    override fun addImage(path: String) {
+        imagePathList.add(path)
+        navigator?.onAddImageSucceed(arrayListOf(path))
+    }
+
+    override fun addImage(paths: ArrayList<String>) {
+        imagePathList.addAll(paths)
+        navigator?.onAddImageSucceed(paths)
+    }
+
+    override fun removeImage(index: Int): Int {
+        imagePathList.apply { removeAt(index) }
+        return index
+    }
 }

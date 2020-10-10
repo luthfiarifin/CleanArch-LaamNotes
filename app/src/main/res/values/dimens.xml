@@ -4,4 +4,5 @@
     <dimen name="standard_margin">8dp</dimen>
     <dimen name="mini_margin">4dp</dimen>
     <dimen name="super_mini_margin">2dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
 </resources>
