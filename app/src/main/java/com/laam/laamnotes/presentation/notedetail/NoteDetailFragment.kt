@@ -1,17 +1,26 @@
 package com.laam.laamnotes.presentation.notedetail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
 import com.laam.laamnotes.presentation.notelist.NoteListFragment
+import com.laam.laamnotes.presentation.util.constant.PermissionConstant
+import com.laam.laamnotes.presentation.util.constant.RequestConstant
 import com.laam.laamnotes.presentation.util.view.NavigationUtil.setNavigationResult
 import com.laam.laamnotes.presentation.util.view.ViewUtil.hideKeyboard
 
@@ -32,7 +41,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         arguments?.let { setUpVariable(it) }
     }
 
-    private fun setUpVariable(it: Bundle) {
+    override fun setUpVariable(it: Bundle) {
         viewModel.noteId.set(NoteDetailFragmentArgs.fromBundle(it).noteId)
 
         if (viewModel.noteId.get() != 0L) {
@@ -63,12 +72,49 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
                 deleteNote()
                 true
             }
+            R.id.item_add_image -> {
+                addImage()
+                true
+            }
             else ->
                 return super.onOptionsItemSelected(item)
         }
     }
 
-    private fun deleteNote() {
+    override fun addImage() {
+        if (checkReadPermission()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                PermissionConstant.READ_EXTERNAL_STORAGE
+            )
+            view?.let {
+                Snackbar.make(it, "Read storage permission required", Snackbar.LENGTH_SHORT).show()
+            }
+        } else {
+            Intent().let { i ->
+                i.type = "image/*"
+                i.action = Intent.ACTION_GET_CONTENT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
+
+                startActivityForResult(i, RequestConstant.IMAGE_PICKER_REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun checkReadPermission(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                context?.let {
+                    ContextCompat.checkSelfPermission(
+                        it,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                } != PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun deleteNote() {
         activity?.let {
             AlertDialog.Builder(it)
                 .setTitle("Delete note")

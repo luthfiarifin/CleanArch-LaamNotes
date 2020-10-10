@@ -7,4 +7,7 @@
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus sagittis felis non auctor.</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus sagittis felis non auctor. Donec et lacus in magna interdum hendrerit sed sit amet lorem. Ut dapibus nulla vitae commodo varius. Mauris elit purus, tempor non posuere at, laoreet id enim. Etiam in risus sed diam sodales accumsan. Suspendisse suscipit non magna id porttitor.</string>
     <string name="delete">Delete</string>
+    <string name="add_image">Add Image</string>
+    <string name="image_note">Image note</string>
+    <string name="delete_image">Delete image</string>
 </resources>
