@@ -3,6 +3,7 @@ package com.laam.laamnotes.presentation.notedetail
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableLong
+import com.laam.core.data.Image
 import com.laam.core.data.Note
 import com.laam.laamnotes.framework.interactors.NoteDetailInteractors
 import com.laam.laamnotes.presentation.common.BaseViewModel
@@ -36,7 +37,11 @@ class NoteDetailViewModel @Inject constructor(
             noteId.get()
         )
 
-        coroutineScopeIO.launch { interactors.addNote(note) }
+        coroutineScopeIO.launch {
+            val addNote = interactors.addNote(note)
+            imagePathList.forEach { interactors.addImage(Image(it, currentTime, addNote)) }
+        }
+
         navigator?.onSaveNoteSucceed()
     }
 
