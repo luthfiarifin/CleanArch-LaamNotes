@@ -1,6 +1,8 @@
 package com.laam.laamnotes.framework.di.module
 
+import com.laam.core.repository.image.ImageRepository
 import com.laam.core.repository.note.NoteRepository
+import com.laam.core.usecase.image.AddImage
 import com.laam.core.usecase.note.AddNote
 import com.laam.core.usecase.note.GetAllNotes
 import com.laam.core.usecase.note.GetNote
@@ -15,11 +17,15 @@ object InteractorsModule {
 
     @Provides
     @JvmStatic
-    fun provideNoteDetailInteractors(repository: NoteRepository) =
+    fun provideNoteDetailInteractors(
+        noteRepository: NoteRepository,
+        imageRepository: ImageRepository
+    ) =
         NoteDetailInteractors(
-            AddNote(repository),
-            GetNote(repository),
-            RemoveNote(repository)
+            AddNote(noteRepository),
+            GetNote(noteRepository),
+            RemoveNote(noteRepository),
+            AddImage(imageRepository)
         )
 
     @Provides
