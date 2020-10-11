@@ -7,7 +7,7 @@ import com.laam.laamnotes.framework.db.entity.NoteEntity
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNoteEntity(noteEntity: NoteEntity)
+    suspend fun addNoteEntity(noteEntity: NoteEntity): Long
 
     @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getNoteEntity(id: Long): NoteEntity?
