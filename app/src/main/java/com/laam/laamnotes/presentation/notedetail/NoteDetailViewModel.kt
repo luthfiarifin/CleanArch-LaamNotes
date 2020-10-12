@@ -7,7 +7,9 @@ import com.laam.core.data.Image
 import com.laam.core.data.Note
 import com.laam.laamnotes.framework.interactors.NoteDetailInteractors
 import com.laam.laamnotes.presentation.common.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NoteDetailViewModel @Inject constructor(
@@ -52,6 +54,10 @@ class NoteDetailViewModel @Inject constructor(
                 noteContent.set(currentNote.content)
                 noteCreationTime.set(currentNote.creationTime)
                 noteUpdateTime.set(currentNote.updateTime)
+            }
+
+            interactors.getAllImagesByNoteId(noteId.get()).let { images ->
+                if (images.isNotEmpty()) withContext(Dispatchers.Main) { addImage(images.map { it.path } as ArrayList<String>) }
             }
         }
     }
