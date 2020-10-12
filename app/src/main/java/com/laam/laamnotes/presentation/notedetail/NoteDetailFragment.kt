@@ -25,6 +25,7 @@ import com.laam.laamnotes.presentation.util.constant.RequestConstant
 import com.laam.laamnotes.presentation.util.view.NavigationUtil.setNavigationResult
 import com.laam.laamnotes.presentation.util.view.ViewUtil.hideKeyboard
 
+
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
     NoteDetailContract.View, NoteDetailImageAdapter.Listener {
 
@@ -102,9 +103,16 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         } else {
             Intent().let { i ->
                 i.type = "image/*"
-                i.action = Intent.ACTION_GET_CONTENT
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
+
+                if (Build.VERSION.SDK_INT < 19) {
+                    i.action = Intent.ACTION_GET_CONTENT
+                } else {
+                    i.action = Intent.ACTION_OPEN_DOCUMENT
+                    i.addCategory(Intent.CATEGORY_OPENABLE)
                 }
 
                 startActivityForResult(i, RequestConstant.IMAGE_PICKER_REQUEST_CODE)
@@ -145,13 +153,31 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
 
         when (requestCode) {
             RequestConstant.IMAGE_PICKER_REQUEST_CODE -> {
+                val takeFlags =
+                    (data?.flags
+                        ?: 0) and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+
                 if (data?.data != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        activity?.contentResolver?.takePersistableUriPermission(
+                            data.data!!,
+                            takeFlags
+                        )
+                    }
+
                     data.data?.let { viewModel.addImage(it.toString()) }
                 } else {
                     data?.clipData?.let { clipData ->
                         val pathList = arrayListOf<String>()
 
                         for (i in 0 until clipData.itemCount) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                activity?.contentResolver?.takePersistableUriPermission(
+                                    clipData.getItemAt(i).uri,
+                                    takeFlags
+                                )
+                            }
+
                             clipData.getItemAt(i).uri?.let { pathList.add(it.toString()) }
                         }
 
