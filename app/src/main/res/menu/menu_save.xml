@@ -13,4 +13,8 @@
         android:icon="@drawable/ic_baseline_delete_24"
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/item_add_image"
+        android:title="@string/add_image" />
 </menu>

@@ -1,26 +1,39 @@
 package com.laam.laamnotes.presentation.notedetail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.laam.laamnotes.R
 import com.laam.laamnotes.databinding.FragmentNoteDetailBinding
 import com.laam.laamnotes.presentation.common.BaseFragment
+import com.laam.laamnotes.presentation.notedetail.adapter.NoteDetailImageAdapter
 import com.laam.laamnotes.presentation.notelist.NoteListFragment
+import com.laam.laamnotes.presentation.util.constant.PermissionConstant
+import com.laam.laamnotes.presentation.util.constant.RequestConstant
 import com.laam.laamnotes.presentation.util.view.NavigationUtil.setNavigationResult
 import com.laam.laamnotes.presentation.util.view.ViewUtil.hideKeyboard
 
+
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailViewModel>(),
-    NoteDetailContract.View {
+    NoteDetailContract.View, NoteDetailImageAdapter.Listener {
 
     override fun getViewModel(): Class<NoteDetailViewModel> = NoteDetailViewModel::class.java
 
     override fun getLayoutId(): Int = R.layout.fragment_note_detail
+
+    private val rvImageAdapter = NoteDetailImageAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,14 +43,19 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         viewModel.setNavigator(this)
 
         arguments?.let { setUpVariable(it) }
+        initUi()
     }
 
-    private fun setUpVariable(it: Bundle) {
+    override fun setUpVariable(it: Bundle) {
         viewModel.noteId.set(NoteDetailFragmentArgs.fromBundle(it).noteId)
 
         if (viewModel.noteId.get() != 0L) {
             viewModel.getCurrentNote()
         }
+    }
+
+    override fun initUi() {
+        viewBinding.recyclerViewImage.adapter = rvImageAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,12 +81,56 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
                 deleteNote()
                 true
             }
+            R.id.item_add_image -> {
+                addImage()
+                true
+            }
             else ->
                 return super.onOptionsItemSelected(item)
         }
     }
 
-    private fun deleteNote() {
+    override fun addImage() {
+        if (checkReadPermission()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                PermissionConstant.READ_EXTERNAL_STORAGE
+            )
+            view?.let {
+                Snackbar.make(it, "Read storage permission required", Snackbar.LENGTH_SHORT).show()
+            }
+        } else {
+            Intent().let { i ->
+                i.type = "image/*"
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
+
+                if (Build.VERSION.SDK_INT < 19) {
+                    i.action = Intent.ACTION_GET_CONTENT
+                } else {
+                    i.action = Intent.ACTION_OPEN_DOCUMENT
+                    i.addCategory(Intent.CATEGORY_OPENABLE)
+                }
+
+                startActivityForResult(i, RequestConstant.IMAGE_PICKER_REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun checkReadPermission(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                context?.let {
+                    ContextCompat.checkSelfPermission(
+                        it,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                } != PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun deleteNote() {
         activity?.let {
             AlertDialog.Builder(it)
                 .setTitle("Delete note")
@@ -82,6 +144,50 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return
+        }
+
+        when (requestCode) {
+            RequestConstant.IMAGE_PICKER_REQUEST_CODE -> {
+                val takeFlags =
+                    (data?.flags
+                        ?: 0) and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+
+                if (data?.data != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        activity?.contentResolver?.takePersistableUriPermission(
+                            data.data!!,
+                            takeFlags
+                        )
+                    }
+
+                    data.data?.let { viewModel.addImage(it.toString()) }
+                } else {
+                    data?.clipData?.let { clipData ->
+                        val pathList = arrayListOf<String>()
+
+                        for (i in 0 until clipData.itemCount) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                activity?.contentResolver?.takePersistableUriPermission(
+                                    clipData.getItemAt(i).uri,
+                                    takeFlags
+                                )
+                            }
+
+                            clipData.getItemAt(i).uri?.let { pathList.add(it.toString()) }
+                        }
+
+                        viewModel.addImage(pathList)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onSaveNoteSucceed() {
         view?.let {
             setNavigationResult(true, NoteListFragment.KEY_RELOAD_DATA)
@@ -89,5 +195,17 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding, NoteDetailVie
             it.hideKeyboard(activity)
             Navigation.findNavController(it).popBackStack()
         }
+    }
+
+    override fun onAddImageSucceed(paths: ArrayList<String>) {
+        rvImageAdapter.submitList(paths)
+    }
+
+    override fun onClick(index: Int) {
+        //TODO("onClick")
+    }
+
+    override fun onDeleteClick(index: Int) {
+        rvImageAdapter.deleteList(viewModel.removeImage(index))
     }
 }

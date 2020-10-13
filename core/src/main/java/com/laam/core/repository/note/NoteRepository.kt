@@ -1,10 +1,10 @@
-package com.laam.core.repository
+package com.laam.core.repository.note
 
 import com.laam.core.data.Note
 
 class NoteRepository(private val dataSource: NoteDataSource) {
 
-    suspend fun addNote(note: Note) = dataSource.add(note)
+    suspend fun addNote(note: Note): Long = dataSource.add(note)
 
     suspend fun getNote(id: Long) = dataSource.get(id)
 

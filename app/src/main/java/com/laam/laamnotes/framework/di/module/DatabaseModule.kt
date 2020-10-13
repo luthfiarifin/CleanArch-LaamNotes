@@ -17,4 +17,9 @@ object DatabaseModule {
     @JvmStatic
     fun provideNoteDao(appDatabase: AppDatabase) =
         appDatabase.noteDao()
+
+    @Provides
+    @JvmStatic
+    fun provideImageDao(appDatabase: AppDatabase) =
+        appDatabase.imageDao()
 }

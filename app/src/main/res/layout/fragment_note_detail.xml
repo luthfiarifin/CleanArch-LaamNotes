@@ -8,11 +8,31 @@
         <variable
             name="viewModel"
             type="com.laam.laamnotes.presentation.notedetail.NoteDetailViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/small_margin"
+            android:paddingVertical="@dimen/normal_margin"
+            android:scrollbars="none"
+            android:visibility="@{viewModel.imagePathList.size > 0 ? View.VISIBLE : View.GONE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_images"
+            tools:visibility="visible" />
 
         <EditText
             android:id="@+id/et_title"
@@ -26,7 +46,7 @@
             android:text="@={viewModel.noteTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerView_image"
             tools:ignore="Autofill" />
 
         <EditText
